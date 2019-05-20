@@ -1,26 +1,50 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {fetchUsers} from './services/users';
+import {Switch, Route} from 'react-router-dom';
+import Home from './components/Home';
+import User from './components/User';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      users: [],
+      loading: true
+    };
+  }
+
+  componentDidMount() {
+    this.getUsers();
+  }
+
+
+  getUsers() {
+    fetchUsers()
+      .then(data => {
+
+        const newUsers = data.results.map((item, index) => {
+          return {...item, id: index};
+        });
+
+        this.setState({
+          users: newUsers,
+          loading: false
+        });
+      });
+  }
+
+  render() {
+    const {users, loading} = this.state;
+    return (
+      <div className="App">
+        <Switch>
+          <Route exact path="/" render={() => <Home users={users} />} />
+          <Route path="/user/:userId" render={routerProps => <User match={routerProps.match} loading={loading} users={users} />} />
+        </Switch>
+      </div>
+    );
+  }
 }
 
 export default App;
