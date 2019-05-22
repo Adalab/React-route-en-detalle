@@ -2,6 +2,11 @@ import React, {Component} from "react";
 import {Link} from 'react-router-dom';
 
 class User extends Component {
+
+  componentWillUnmount() {
+    this.props.resetFilters();
+  }
+
   render() {
     console.log(this.props.match.params);
     console.log(this.props.users);
