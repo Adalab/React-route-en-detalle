@@ -11,9 +11,11 @@ class App extends React.Component {
     this.state = {
       users: [],
       loading: true,
-      queryName: ''
+      queryName: '',
+      queryAge: 0
     };
     this.handleNameFilter = this.handleNameFilter.bind(this);
+    this.handleAgeFilter = this.handleAgeFilter.bind(this);
     this.resetFilters = this.resetFilters.bind(this);
   }
 
@@ -29,9 +31,22 @@ class App extends React.Component {
     })
   }
 
+  handleAgeFilter(event) {
+    let userQuery = event.currentTarget.value;
+
+    if (userQuery === '') {
+      userQuery = 0;
+    }
+ 
+    this.setState({
+      queryAge: parseInt(userQuery)
+    })
+  }
+
   resetFilters() {
     this.setState({
-      queryName: ''
+      queryName: '',
+      queryAge: 0
     });
   }
 
@@ -59,6 +74,8 @@ class App extends React.Component {
             users={users} 
             queryName={queryName}
             filterName={this.handleNameFilter}
+            queryAge={queryAge}
+            filterAge={this.handleAgeFilter}
 
             />} />
           <Route path="/user/:userId" render={routerProps => <User 

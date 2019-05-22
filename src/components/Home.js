@@ -1,20 +1,24 @@
 import React, {Component} from "react";
 import {Link} from 'react-router-dom';
 import Filters from './Filters';
+import PropTypes from 'prop-types';
 
 class Home extends Component {
   render() {
-    const {users, queryName, filterName} = this.props;
+    const {users, queryName, filterName, queryAge, filterAge} = this.props;
     return (
       <div className="home">
         <Filters
           filterName={filterName} 
           queryName={queryName}
+          filterAge={filterAge}
+          queryAge={queryAge}
         />
 
         <ul className="users">
           {users
             .filter(item => item.name.first.includes(queryName) || item.name.last.includes(queryName))
+            .filter(item => item.dob.age >= queryAge)
             .map(item => {
               return (
                 <li className="user" key={item.id}>
@@ -35,6 +39,10 @@ class Home extends Component {
       </div>
     );
   }
+}
+
+Home.propTypes = {
+  queryAge: PropTypes.number
 }
 
 export default Home;
