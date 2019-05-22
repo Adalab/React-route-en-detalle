@@ -10,14 +10,30 @@ class App extends React.Component {
 
     this.state = {
       users: [],
-      loading: true
+      loading: true,
+      queryName: ''
     };
+    this.handleNameFilter = this.handleNameFilter.bind(this);
+    this.resetFilters = this.resetFilters.bind(this);
   }
 
   componentDidMount() {
     this.getUsers();
   }
 
+  handleNameFilter(event) {
+    const userQuery = event.currentTarget.value;
+
+    this.setState({
+      queryName: userQuery
+    })
+  }
+
+  resetFilters() {
+    this.setState({
+      queryName: ''
+    });
+  }
 
   getUsers() {
     fetchUsers()
@@ -35,12 +51,22 @@ class App extends React.Component {
   }
 
   render() {
-    const {users, loading} = this.state;
+    const {users, loading, queryName, queryAge} = this.state;
     return (
       <div className="App">
         <Switch>
-          <Route exact path="/" render={() => <Home users={users} />} />
-          <Route path="/user/:userId" render={routerProps => <User match={routerProps.match} loading={loading} users={users} />} />
+          <Route exact path="/" render={() => <Home 
+            users={users} 
+            queryName={queryName}
+            filterName={this.handleNameFilter}
+
+            />} />
+          <Route path="/user/:userId" render={routerProps => <User 
+            match={routerProps.match} 
+            loading={loading} 
+            users={users} 
+            resetFilters={this.resetFilters}
+            />} />
         </Switch>
       </div>
     );
