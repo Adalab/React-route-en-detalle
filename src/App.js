@@ -12,10 +12,12 @@ class App extends React.Component {
       users: [],
       loading: true,
       queryName: '',
-      queryAge: 0
+      queryAge: 0,
+      queryGender: 'female'
     };
     this.handleNameFilter = this.handleNameFilter.bind(this);
     this.handleAgeFilter = this.handleAgeFilter.bind(this);
+    this.handleGenderFilter = this.handleGenderFilter.bind(this);
     this.resetFilters = this.resetFilters.bind(this);
   }
 
@@ -28,6 +30,14 @@ class App extends React.Component {
 
     this.setState({
       queryName: userQuery
+    })
+  }
+
+  handleGenderFilter(event) {
+    const userQuery = event.currentTarget.value;
+
+    this.setState({
+      queryGender: userQuery
     })
   }
 
@@ -46,7 +56,8 @@ class App extends React.Component {
   resetFilters() {
     this.setState({
       queryName: '',
-      queryAge: 0
+      queryAge: 0,
+      queryGender: 'all'
     });
   }
 
@@ -66,7 +77,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {users, loading, queryName, queryAge} = this.state;
+    const {users, loading, queryName, queryAge, queryGender} = this.state;
     return (
       <div className="App">
         <Switch>
@@ -76,6 +87,8 @@ class App extends React.Component {
             filterName={this.handleNameFilter}
             queryAge={queryAge}
             filterAge={this.handleAgeFilter}
+            queryGender={queryGender}
+            filterGender={this.handleGenderFilter}
 
             />} />
           <Route path="/user/:userId" render={routerProps => <User 

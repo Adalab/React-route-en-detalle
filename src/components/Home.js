@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 class Home extends Component {
   render() {
-    const {users, queryName, filterName, queryAge, filterAge} = this.props;
+    const {users, queryName, filterName, queryAge, filterAge, queryGender, filterGender} = this.props;
     return (
       <div className="home">
         <Filters
@@ -13,12 +13,22 @@ class Home extends Component {
           queryName={queryName}
           filterAge={filterAge}
           queryAge={queryAge}
+          filterGender={filterGender}
         />
 
         <ul className="users">
           {users
-            .filter(item => item.name.first.includes(queryName) || item.name.last.includes(queryName))
+            .filter(item => item.name.first.toLowerCase().includes(queryName.toLowerCase()) || item.name.last.toLowerCase().includes(queryName.toLowerCase()))
             .filter(item => item.dob.age >= queryAge)
+            .filter(item => {
+              if (queryGender === 'all') {
+                return item;
+              } else if (queryGender === 'female') {
+                return item.gender === 'female';
+              } else {
+                return item.gender === 'male';
+              }
+            })
             .map(item => {
               return (
                 <li className="user" key={item.id}>
